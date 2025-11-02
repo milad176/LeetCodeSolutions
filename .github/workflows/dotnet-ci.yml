@@ -13,6 +13,10 @@ jobs:
  build-and-test:
    runs-on: ubuntu-latest
 
+   defaults:
+     run:
+       working-directory: ./src # 👈 Run all commands from /src
+
    steps:
    # Step 1: Checkout the repo
    - name: Checkout repository
