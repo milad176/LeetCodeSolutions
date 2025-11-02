@@ -28,14 +28,23 @@ jobs:
      with:
        dotnet-version: '8.0.x' # adjust if you're using 7.0 or 6.0
 
-   # Step 3: Restore dependencies
+   # Step 3: Cache NuGet packages for faster builds
+   - name: Cache NuGet packages
+     uses: actions/cache@v4
+     with:
+       path: ~/.nuget/packages
+       key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+       restore-keys: |
+         ${{ runner.os }}-nuget-   
+
+   # Step 4: Restore dependencies
    - name: Restore dependencies
      run: dotnet restore
 
-   # Step 4: Build the project
+   # Step 5: Build the project
    - name: Build
      run: dotnet build --no-restore --configuration Release
 
-   # Step 5: Run tests
+   # Step 6: Run tests
    - name: Run unit tests
      run: dotnet test --no-build --verbosity normal --configuration Release
