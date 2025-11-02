@@ -1,0 +1,37 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET CI
+
+on:
+ push:
+   branches: [ "main", "master" ]
+ pull_request:
+   branches: [ "main", "master" ]
+
+jobs:
+ build-and-test:
+   runs-on: ubuntu-latest
+
+   steps:
+   # Step 1: Checkout the repo
+   - name: Checkout repository
+     uses: actions/checkout@v4
+
+   # Step 2: Set up .NET SDK
+   - name: Setup .NET
+     uses: actions/setup-dotnet@v4
+     with:
+       dotnet-version: '8.0.x' # adjust if you're using 7.0 or 6.0
+
+   # Step 3: Restore dependencies
+   - name: Restore dependencies
+     run: dotnet restore
+
+   # Step 4: Build the project
+   - name: Build
+     run: dotnet build --no-restore --configuration Release
+
+   # Step 5: Run tests
+   - name: Run unit tests
+     run: dotnet test --no-build --verbosity normal --configuration Release
